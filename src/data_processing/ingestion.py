@@ -1,40 +1,95 @@
-"""Data ingestion functions.
+"""Data ingestion functions for library pipeline.
 
-TODO: Complete these functions for the library project.
+This module handles loading data from various file formats.
 """
 
 import pandas as pd
 import json
 import logging
+from pathlib import Path
 
+# Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def load_csv(filepath):
-    """Load CSV file with error handling.
+def load_csv(filepath, **kwargs):
+    """Load CSV file into DataFrame.
     
     Args:
-        filepath: Path to CSV file
+        filepath (str): Path to CSV file
+        **kwargs: Additional arguments for pd.read_csv()
         
     Returns:
-        DataFrame with loaded data
+        pd.DataFrame: Loaded data
         
-    TODO: Add error handling and logging
+    Raises:
+        FileNotFoundError: If file doesn't exist
+        pd.errors.EmptyDataError: If file is empty
+        
+    Example:
+        >>> df = load_csv('data/circulation.csv')
+        >>> print(len(df))
     """
-    # TODO: Implement this function
-    pass
+    filepath = Path(filepath)
+    
+    # Check file exists
+    if not filepath.exists():
+        logger.error(f"File not found: {filepath}")
+        raise FileNotFoundError(f"File not found: {filepath}")
+    
+    try:
+        logger.info(f"Loading CSV from {filepath}")
+        df = pd.read_csv(filepath, **kwargs)
+        logger.info(f"Successfully loaded {len(df)} rows from {filepath}")
+        return df
+        
+    except pd.errors.EmptyDataError:
+        logger.error(f"CSV file is empty: {filepath}")
+        raise
+    except Exception as e:
+        logger.error(f"Error loading CSV {filepath}: {e}")
+        raise
 
 def load_json(filepath):
-    """Load JSON file and flatten structure.
+    """Load JSON file and flatten to DataFrame.
     
     Args:
-        filepath: Path to JSON file
+        filepath (str): Path to JSON file
         
     Returns:
-        DataFrame with flattened data
+        pd.DataFrame: Flattened data
         
-    TODO: Implement JSON loading and flattening
+    Raises:
+        FileNotFoundError: If file doesn't exist
+        json.JSONDecodeError: If file is not valid JSON
+        
+    Example:
+        >>> df = load_json('data/events.json')
     """
-    # TODO: Implement this function
-    pass
-  
+    filepath = Path(filepath)
+    
+    if not filepath.exists():
+        logger.error(f"File not found: {filepath}")
+        raise FileNotFoundError(f"File not found: {filepath}")
+    
+    try:
+        logger.info(f"Loading JSON from {filepath}")
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+        
+        # Flatten nested structure
+        # Adjust based on your JSON structure
+        if isinstance(data, dict) and 'events' in data:
+            df = pd.json_normalize(data['events'])
+        else:
+            df = pd.json_normalize(data)
+            
+        logger.info(f"Successfully loaded {len(df)} records from {filepath}")
+        return df
+        
+    except json.JSONDecodeError as e:
+        logger.error(f"Invalid JSON in {filepath}: {e}")
+        raise
+    except Exception as e:
+        logger.error(f"Error loading JSON {filepath}: {e}")
+        raise
