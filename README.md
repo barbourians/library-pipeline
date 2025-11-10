@@ -6,7 +6,7 @@
 ## Architecture
 [TODO: Add architecture diagram]
 
-See [docs/architecture/](docs/architecture/) for details.
+See [docs/architecture/](docs/architecture/index.md) for details.
 
 ## Setup
 
