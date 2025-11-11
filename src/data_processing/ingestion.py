@@ -93,3 +93,56 @@ def load_json(filepath):
     except Exception as e:
         logger.error(f"Error loading JSON {filepath}: {e}")
         raise
+
+from pathlib import Path
+import pandas as pd
+
+def load_excel(filepath, sheet_name=0, **kwargs):
+    """Load Excel file into DataFrame.
+
+    Args:
+        filepath (str | Path): Path to Excel file
+        sheet_name (str | int | list[str | int] | None): Sheet(s) to read, same as pandas.read_excel()
+        **kwargs: Additional arguments for pd.read_excel()
+
+    Returns:
+        pd.DataFrame | dict[str, pd.DataFrame]: Loaded data. Dict when multiple sheets requested.
+
+    Raises:
+        FileNotFoundError: If file doesn't exist
+        ValueError: If the sheet doesn't exist or file is invalid
+        ImportError: If the required Excel engine isn't installed
+        Exception: For other read errors
+
+    Example:
+        >>> df = load_excel('../data/catalogue.xlsx', sheet_name='Catalogue')
+        >>> print(len(df))
+    """
+    filepath = Path(filepath)
+
+    # Check file exists
+    if not filepath.exists():
+        logger.error(f"File not found: {filepath}")
+        raise FileNotFoundError(f"File not found: {filepath}")
+
+    try:
+        logger.info(f"Loading Excel from {filepath} (sheet_name={sheet_name})")
+        df = pd.read_excel(filepath, sheet_name=sheet_name, **kwargs)
+
+        if isinstance(df, dict):
+            total_rows = sum(len(v) for v in df.values())
+            logger.info(f"Successfully loaded {len(df)} sheet(s), total {total_rows} rows from {filepath}")
+        else:
+            logger.info(f"Successfully loaded {len(df)} rows from {filepath}")
+
+        return df
+
+    except ValueError as e:
+        logger.error(f"Value error loading Excel {filepath}: {e}")
+        raise
+    except ImportError as e:
+        logger.error(f"Missing Excel engine for {filepath}: {e}")
+        raise
+    except Exception as e:
+        logger.error(f"Error loading Excel {filepath}: {e}")
+        raise
