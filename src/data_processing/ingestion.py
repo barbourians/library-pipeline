@@ -94,9 +94,6 @@ def load_json(filepath):
         logger.error(f"Error loading JSON {filepath}: {e}")
         raise
 
-from pathlib import Path
-import pandas as pd
-
 def load_excel(filepath, sheet_name=0, **kwargs):
     """Load Excel file into DataFrame.
 
@@ -122,8 +119,8 @@ def load_excel(filepath, sheet_name=0, **kwargs):
 
     # Check file exists
     if not filepath.exists():
-        logger.error(f"File not found: {filepath}")
-        raise FileNotFoundError(f"File not found: {filepath}")
+        logger.error(f"Excel File not found: {filepath}")
+        raise FileNotFoundError(f"Excel File not found: {filepath}")
 
     try:
         logger.info(f"Loading Excel from {filepath} (sheet_name={sheet_name})")
