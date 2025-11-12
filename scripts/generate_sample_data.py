@@ -31,6 +31,7 @@ np.random.seed(42)
 # 1. CIRCULATION DATA (CSV with quality issues)
 # ============================================
 
+
 def generate_circulation_data(n):
     """Generate circulation data with intentional quality issues."""
 
@@ -88,6 +89,7 @@ def generate_circulation_data(n):
 # 2. EVENTS DATA (JSON with nested structure)
 # ============================================
 
+
 def generate_events_data(n):
     """Generate events data as nested JSON."""
 
@@ -135,6 +137,7 @@ def generate_events_data(n):
 # 3. FEEDBACK DATA (Unstructured text)
 # ============================================
 
+
 def maybe_add_typo(text):
     """Randomly introduce a small typo or remove punctuation."""
 
@@ -154,6 +157,7 @@ def maybe_add_typo(text):
         return text.upper()
 
     return text
+
 
 def generate_feedback_data(n):
     """Generate unstructured feedback text."""
@@ -175,7 +179,7 @@ def generate_feedback_data(n):
     ]
 
     features = [
-        'wifi', 'children\'s section', 'book selection', 
+        'wifi', 'children\'s section', 'book selection',
         'opening hours', 'study spaces', 'computer access',
         'staff', 'events', 'facilities'
     ]
@@ -183,7 +187,7 @@ def generate_feedback_data(n):
     issues = ['down', 'broken', 'unavailable', 'too limited', 'overcrowded']
 
     branches = [
-        'Stratford', 'East Ham', 'Manor Park', 'Plaistow', 
+        'Stratford', 'East Ham', 'Manor Park', 'Plaistow',
         'Custom House', 'North Woolwich', 'Beckton'
     ]
 
@@ -222,6 +226,7 @@ def generate_feedback_data(n):
 # 4. CATALOGUE DATA (Messy Excel)
 # ============================================
 
+
 def generate_catalogue_data(n):
     """Generate book catalogue with Excel-specific issues."""
 
@@ -238,7 +243,7 @@ def generate_catalogue_data(n):
             'Publication Year': random.randint(1950, 2024),
             'Copies Available': random.randint(0, 10),
             'Acquisition Date': fake.date_between(start_date='-10y', end_date='today'),
-            'Status': random.choice(['Available','Checked Out','Reserved','Damaged','Missing'])
+            'Status': random.choice(['Available', 'Checked Out', 'Reserved', 'Damaged', 'Missing'])
         }
 
         data.append(record)
