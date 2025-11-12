@@ -217,8 +217,6 @@ def process_feedback_data():
         df.groupby(["branch", "rating"], as_index=False).size().rename(columns={"size": "count"})
     )
 
-    print(df_summary)
-
     # Step 2: Save
     print("\n[2/2] Saving processed feedback...")
     filepath = save_to_silver(df_summary, "feedback_summary.csv")
