@@ -245,7 +245,7 @@ def run_pipeline():
         results['circulation'] = process_circulation_data()
         results['events'] = process_events_data()
         #results['catalogue'] = process_catalogue_data()
-        results['feedback'] = process_feedback_data()
+        #results['feedback'] = process_feedback_data()
         
         # Calculate pipeline statistics
         end_time = datetime.now()
