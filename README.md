@@ -1,6 +1,8 @@
 # Library Data Pipeline
 
+![Last Commit](https://img.shields.io/github/last-commit/barbourians/library-pipeline)
 ![CI](https://github.com/barbourians/library-pipeline/actions/workflows/ci.yml/badge.svg)
+
 
 ## Project Overview
 [TODO: Describe the library's data quality problem]
