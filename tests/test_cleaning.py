@@ -152,3 +152,7 @@ def test_handle_missing_drop_column_forward_fill(
 
     # Result should match pytest fixture for forward fill
     pdt.assert_frame_equal(result, sample_df_with_forward_fill)
+
+# ========================================
+# TESTS FOR standardize_dates()
+# ========================================
