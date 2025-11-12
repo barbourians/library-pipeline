@@ -13,6 +13,7 @@ Date: [Today's Date]
 Module: DE5 Module 5 - Product Development
 """
 
+import re
 import pandas as pd
 from pathlib import Path
 from datetime import datetime
