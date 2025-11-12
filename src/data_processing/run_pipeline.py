@@ -160,15 +160,15 @@ def process_catalogue_data():
 
     # Step 2: Remove duplicates
     print("\n[2/4] Removing duplicates...")
-    df_clean = remove_duplicates(df, subset=['isbn'])
+    df_clean = remove_duplicates(df, subset=['ISBN'])
     rows_removed = len(df) - len(df_clean)
     print(f"  - Removed {rows_removed:,} duplicate rows")
 
-    # Step 3: Validate ISBNs (if isbn column exists)
-    if 'isbn' in df_clean.columns:
+    # Step 3: Validate ISBNs (if ISBN column exists)
+    if 'ISBN' in df_clean.columns:
         print("\n[3/4] Validating ISBNs...")
-        df_clean['isbn_valid'] = df_clean['isbn'].apply(validate_isbn)
-        invalid_count = (~df_clean['isbn_valid']).sum()
+        df_clean['ISBN_valid'] = df_clean['ISBN'].apply(validate_isbn)
+        invalid_count = (~df_clean['ISBN_valid']).sum()
         print(f"  - Found {invalid_count:,} invalid ISBNs")
 
     # Step 4: Save cleaned data
