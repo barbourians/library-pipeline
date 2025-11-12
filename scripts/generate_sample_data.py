@@ -238,7 +238,7 @@ def generate_catalogue_data(n):
             'Publication Year': random.randint(1950, 2024),
             'Copies Available': random.randint(0, 10),
             'Acquisition Date': fake.date_between(start_date='-10y', end_date='today'),
-            'Status': random.choice(['Available', 'Checked Out', 'Reserved', 'Damaged', 'Missing'])
+            'Status': random.choice(['Available','Checked Out','Reserved','Damaged','Missing'])
         }
 
         data.append(record)
@@ -246,11 +246,12 @@ def generate_catalogue_data(n):
     df = pd.DataFrame(data)
 
     # INJECT EXCEL-SPECIFIC ISSUES
-    
+
     # 1. Some ISBNs stored as numbers (Excel removes leading zeros)
     numeric_isbns = random.sample(range(len(df)), int(len(df) * 0.1))
     for idx in numeric_isbns:
-        df.loc[idx, 'ISBN'] = int(df.loc[idx, 'ISBN'].replace('-', '')) if df.loc[idx, 'ISBN'] else None
+        df.loc[idx, 'ISBN'] = int(df.loc[idx, 'ISBN'].replace('-', '')) 
+        if df.loc[idx, 'ISBN'] else None
 
     # 2. Inconsistent column names (spaces vs underscores)
     # Will handle this when writing to Excel with multiple sheets
@@ -260,6 +261,7 @@ def generate_catalogue_data(n):
 # ============================================
 # GENERATE ALL FILES
 # ============================================
+
 
 def generate_all_sample_data(output_dir='data'):
     """Generate all sample data files."""
@@ -274,9 +276,9 @@ def generate_all_sample_data(output_dir='data'):
     circ_df = generate_circulation_data(CIRCULATION)
     circ_df.to_csv(f'{output_dir}/circulation_data.csv', index=False)
     print(f"    ✓ Created: {len(circ_df)} rows")
-    print(f"    - Duplicates: ~2%")
-    print(f"    - Missing ISBNs: ~5%")
-    print(f"    - Date format issues: ~10%")
+    print("    - Duplicates: ~2%")
+    print("    - Missing ISBNs: ~5%")
+    print("    - Date format issues: ~10%")
 
     # 2. Events JSON
     print("  - Generating events_data.json...")
@@ -284,7 +286,7 @@ def generate_all_sample_data(output_dir='data'):
     with open(f'{output_dir}/events_data.json', 'w') as f:
         json.dump(events, f, indent=2)
     print(f"    ✓ Created: {len(events['events'])} events")
-    print(f"    - Nested structure (requires flattening)")
+    print("    - Nested structure (requires flattening)")
 
     # 3. Feedback text
     print("  - Generating feedback.txt...")
@@ -292,7 +294,7 @@ def generate_all_sample_data(output_dir='data'):
     with open(f'{output_dir}/feedback.txt', 'w') as f:
         f.write(feedback)
     print(f"    ✓ Created: {FEEDBACK} feedback entries")
-    print(f"    - Unstructured text format")
+    print("    - Unstructured text format")
 
     # 4. Catalogue Excel
     print("  - Generating catalogue.xlsx...")
@@ -312,15 +314,15 @@ def generate_all_sample_data(output_dir='data'):
         summary.to_excel(writer, sheet_name='Summary', index=False)
 
     print(f"    ✓ Created: {len(catalogue_df)} books")
-    print(f"    - Multiple sheets")
-    print(f"    - ISBN format issues")
+    print("    - Multiple sheets")
+    print("    - ISBN format issues")
 
     print("\n✅ All sample data generated successfully!")
     print(f"\nFiles created in '{output_dir}/':")
-    print(f"  - circulation_data.csv (messy CSV)")
-    print(f"  - events_data.json (nested JSON)")
-    print(f"  - feedback.txt (unstructured text)")
-    print(f"  - catalogue.xlsx (messy Excel)")
+    print("  - circulation_data.csv (messy CSV)")
+    print("  - events_data.json (nested JSON)")
+    print("  - feedback.txt (unstructured text)")
+    print("  - catalogue.xlsx (messy Excel)")
 
     # Generate data quality report
     print("\n" + "="*60)
@@ -346,6 +348,7 @@ def generate_all_sample_data(output_dir='data'):
     print(f"  ~{int(CATALOGUE*0.10)} ISBNs stored as numbers (~10%)")
     print("  ⚠️  Multiple sheets (only need 'Catalogue')")
     print("  ⚠️  Mixed data types in ISBN column")
+
 
 if __name__ == '__main__':
     generate_all_sample_data()
