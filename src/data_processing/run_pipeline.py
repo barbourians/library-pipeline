@@ -64,7 +64,6 @@ def save_to_silver(df, filename):
     """Save DataFrame to silver layer as CSV."""
     filepath = SILVER_DIR / filename
     df.to_csv(filepath, index=False)
-    print(f"  ✓ Saved to: {filepath}")
     return filepath
 
 
@@ -75,7 +74,7 @@ def save_to_silver(df, filename):
 def process_circulation_data():
     """
     Process circulation data (borrowing transactions).
-    
+
     Steps:
     1. Load from bronze
     2. Remove duplicates
@@ -84,27 +83,28 @@ def process_circulation_data():
     5. Save to silver
     """
     print_section_header("Processing Circulation Data")
-    
+
     # Step 1: Load raw data
     print("\n[1/4] Loading raw data...")
     df = load_csv('data/circulation_data.csv')
     print_dataframe_info(df, "Raw data")
-    
+
     # Step 2: Remove duplicates
     print("\n[2/4] Removing duplicates...")
     df_clean = remove_duplicates(df, subset=['transaction_id'])
     rows_removed = len(df) - len(df_clean)
     print(f"  - Removed {rows_removed:,} duplicate rows")
-    
+
     # Step 3: Handle missing values
     print("\n[3/4] Handling missing values...")
     df_clean = handle_missing_values(df_clean, strategy='drop')
-    print(f"  - Dropped rows with missing values")
-    
+    print("  - Dropped rows with missing values")
+
     # Step 4: Save cleaned data
     print("\n[4/4] Saving cleaned data...")
     filepath = save_to_silver(df_clean, 'circulation_clean.csv')
-    
+    print(f"  ✓ Saved to: {filepath}")
+
     print_dataframe_info(df_clean, "Cleaned data")
     
     return df_clean
@@ -134,6 +134,7 @@ def process_events_data():
     # Step 3: Save cleaned data
     print("\n[3/3] Saving cleaned data...")
     filepath = save_to_silver(df_clean, 'events_clean.csv')
+    print(f"  ✓ Saved to: {filepath}")
     
     print_dataframe_info(df_clean, "Cleaned data")
     
@@ -174,6 +175,7 @@ def process_catalogue_data():
     # Step 4: Save cleaned data
     print("\n[4/4] Saving cleaned data...")
     filepath = save_to_silver(df_clean, 'catalogue_clean.csv')
+    print(f"  ✓ Saved to: {filepath}")
     
     print_dataframe_info(df_clean, "Cleaned data")
     
@@ -220,6 +222,7 @@ def process_feedback_data():
     # Step 2: Save
     print("\n[2/2] Saving processed feedback...")
     filepath = save_to_silver(df_summary, "feedback_summary.csv")
+    print(f"  ✓ Saved to: {filepath}")
 
     print(f"  - Processed {feedback_count} feedback entries")
     
