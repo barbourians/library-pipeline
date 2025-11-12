@@ -18,13 +18,13 @@ from pathlib import Path
 from datetime import datetime
 
 # Import our custom functions
-from data_processing.ingestion import load_csv, load_json, load_excel
-from data_processing.cleaning import (
+from src.data_processing.ingestion import load_csv, load_json, load_excel
+from src.data_processing.cleaning import (
     remove_duplicates,
     handle_missing_values,
     standardize_dates
 )
-from data_processing.validation import validate_isbn
+from src.data_processing.validation import validate_isbn
 
 
 # ============================================
