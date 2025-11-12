@@ -34,6 +34,15 @@ def sample_df_with_missing():
         'value': [10, 20, None, 40]
     })
 
+@pytest.fixture
+def sample_df_with_forward_fill():
+    """Sample DataFrame with missing values."""
+    return pd.DataFrame({
+        'id': [1, 2, 3, 4],
+        'name': ['Alice', 'Alice', 'Charlie', 'David'],
+        'value': [10, 20, 20, 40]
+    })
+
 # ========================================
 # TESTS FOR remove_duplicates()
 # ========================================
@@ -113,3 +122,33 @@ def test_handle_missing_invalid_strategy(sample_df_with_missing):
     with pytest.raises(ValueError, match="Unknown strategy"):
         handle_missing_values(sample_df_with_missing, strategy='invalid')
 
+def test_handle_missing_drop_column_name(sample_df_with_missing):
+    """Test dropping rows with missing values for column name"""
+    result = handle_missing_values(
+        sample_df_with_missing, 
+        strategy='drop',
+        columns=['name']
+        )
+
+    # Should only have rows without any NaN
+    assert len(result) == 3
+    assert result['name'].notna().all()
+
+def test_fill_value_must_be_provided_when_strategy_fill(sample_df_with_missing):
+    """Test that fill_value missing raises error."""
+    with pytest.raises(ValueError, match="fill_value must be provided when strategy='fill'"):
+        handle_missing_values(sample_df_with_missing, strategy='fill')
+
+def test_handle_missing_drop_column_forward_fill(
+        sample_df_with_missing, sample_df_with_forward_fill
+        ):
+    """Test dropping rows with missing values."""
+    result = handle_missing_values(sample_df_with_missing, strategy='forward_fill')
+
+    # All rows should be returned
+    assert len(result) == 4
+    assert result['name'].notna().all()
+    assert result['value'].notna().all()
+
+    # Result should match pytest fixture for forward fill
+    pdt.assert_frame_equal(result, sample_df_with_forward_fill)
