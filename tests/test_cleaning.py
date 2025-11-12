@@ -22,7 +22,7 @@ def sample_df_with_duplicates():
     return pd.DataFrame({
         'id': [1, 2, 2, 3, 3, 3],
         'name': ['Alice', 'Bob', 'Bob', 'Charlie', 'Charlie', 'Charlie'],
-        'value': [10, 20, 20, 30, 30, 30]
+        'value': [10.2, 20.1, 20.1, 30.5, 30.5, 30.5]
     })
 
 @pytest.fixture
@@ -31,7 +31,7 @@ def sample_df_with_missing():
     return pd.DataFrame({
         'id': [1, 2, 3, 4],
         'name': ['Alice', None, 'Charlie', 'David'],
-        'value': [10, 20, None, 40]
+        'value': [10.2, 20.1, None, 40.7]
     })
 
 @pytest.fixture
@@ -40,7 +40,7 @@ def sample_df_with_forward_fill():
     return pd.DataFrame({
         'id': [1, 2, 3, 4],
         'name': ['Alice', 'Alice', 'Charlie', 'David'],
-        'value': [10, 20, 20, 40]
+        'value': [10.2, 20.1, 20.1, 40.7]
     })
 
 # ========================================
@@ -54,7 +54,7 @@ def test_remove_duplicates_exact(sample_df_with_duplicates):
     expected = pd.DataFrame({
         'id': [1, 2, 3],
         'name': ['Alice', 'Bob', 'Charlie'],
-        'value': [10, 20, 30]
+        'value': [10.2, 20.1, 30.5]
     })
 
     # Reset index for comparison

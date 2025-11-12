@@ -71,7 +71,7 @@ def handle_missing_values(df, strategy='drop', fill_value=None, columns=None):
         logger.info(f"Filled missing values with {fill_value}")
 
     elif strategy == 'forward_fill':
-        df[target_cols] = df[target_cols].fillna(method='ffill')
+        df[target_cols] = df[target_cols].ffill()
         logger.info("Forward filled missing values")
 
     else:
