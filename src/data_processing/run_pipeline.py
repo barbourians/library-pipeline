@@ -198,18 +198,31 @@ def process_feedback_data():
     # Read the text file
     with open('data/feedback.txt', 'r', encoding='utf-8') as f:
         content = f.read()
-    
-    # Simple parsing (you might improve this)
-    # For now, just count the feedbacks
+
+    # Count the feedbacks
     feedback_count = content.count('Feedback #')
     print(f"  - Found {feedback_count} feedback entries")
     
-    # Create a simple DataFrame (simplified for demo)
-    df = pd.DataFrame({
-        'feedback_count': [feedback_count],
-        'processed_date': [datetime.now()]
-    })
-    
+    # Capture both branch name and rating number
+    pattern = r"- ([A-Za-z\s]+ Branch) ~ (\d)⭐"
+    matches = re.findall(pattern, content)
+
+    # Convert to DataFrame
+    df = pd.DataFrame(matches, columns=["branch", "rating"])
+    df["rating"] = df["rating"].astype(int)
+
+    # Group by SBranch and Rating
+    df_summary = (
+        df.groupby(["branch", "rating"], as_index=False).size().rename(columns={"size": "count"})
+    )
+
+    print(summary)
+
+    # Step 2: Save
+    print("\n[2/2] Saving processed feedback...")
+    filepath = save_to_silver(df_summary, "feedback_summary.csv")
+    Th
+
     # Step 2: Save
     print("\n[2/2] Saving processed feedback...")
     filepath = save_to_silver(df, 'feedback_summary.csv')
