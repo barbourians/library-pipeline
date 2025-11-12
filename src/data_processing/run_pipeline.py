@@ -104,9 +104,8 @@ def process_circulation_data():
     print("\n[4/4] Saving cleaned data...")
     filepath = save_to_silver(df_clean, 'circulation_clean.csv')
     print(f"  ✓ Saved to: {filepath}")
-
     print_dataframe_info(df_clean, "Cleaned data")
-    
+
     return df_clean
 
 
@@ -121,23 +120,23 @@ def process_events_data():
     4. Save to silver
     """
     print_section_header("Processing Events Data")
-    
+
     # Step 1: Load raw data
     print("\n[1/3] Loading raw data...")
     df = load_json('data/events_data.json')
     print_dataframe_info(df, "Raw data")
-    
+
     # Step 2: Handle missing values
     print("\n[2/3] Handling missing values...")
     df_clean = handle_missing_values(df, strategy='drop')
-    
+
     # Step 3: Save cleaned data
     print("\n[3/3] Saving cleaned data...")
     filepath = save_to_silver(df_clean, 'events_clean.csv')
     print(f"  ✓ Saved to: {filepath}")
-    
+
     print_dataframe_info(df_clean, "Cleaned data")
-    
+
     return df_clean
 
 
@@ -153,32 +152,32 @@ def process_catalogue_data():
     5. Save to silver
     """
     print_section_header("Processing Catalogue Data")
-    
+
     # Step 1: Load raw data
     print("\n[1/4] Loading raw data...")
     df = load_excel('data/catalogue.xlsx')
     print_dataframe_info(df, "Raw data")
-    
+
     # Step 2: Remove duplicates
     print("\n[2/4] Removing duplicates...")
     df_clean = remove_duplicates(df, subset=['isbn'])
     rows_removed = len(df) - len(df_clean)
     print(f"  - Removed {rows_removed:,} duplicate rows")
-    
+
     # Step 3: Validate ISBNs (if isbn column exists)
     if 'isbn' in df_clean.columns:
         print("\n[3/4] Validating ISBNs...")
         df_clean['isbn_valid'] = df_clean['isbn'].apply(validate_isbn)
         invalid_count = (~df_clean['isbn_valid']).sum()
         print(f"  - Found {invalid_count:,} invalid ISBNs")
-    
+
     # Step 4: Save cleaned data
     print("\n[4/4] Saving cleaned data...")
     filepath = save_to_silver(df_clean, 'catalogue_clean.csv')
     print(f"  ✓ Saved to: {filepath}")
-    
+
     print_dataframe_info(df_clean, "Cleaned data")
-    
+
     return df_clean
 
 
@@ -195,9 +194,9 @@ def process_feedback_data():
     3. Save to silver
     """
     print_section_header("Processing Feedback Data")
-    
+
     print("\n[1/2] Loading and parsing feedback text...")
-    
+
     # Read the text file
     with open('data/feedback.txt', 'r', encoding='utf-8') as f:
         content = f.read()
@@ -205,7 +204,7 @@ def process_feedback_data():
     # Count the feedbacks
     feedback_count = content.count('Feedback #')
     print(f"  - Found {feedback_count} feedback entries")
-    
+
     # Capture both branch name and rating number
     pattern = r"- ([A-Za-z\s]+ Branch) ~ (\d)⭐"
     matches = re.findall(pattern, content)
@@ -225,7 +224,7 @@ def process_feedback_data():
     print(f"  ✓ Saved to: {filepath}")
 
     print(f"  - Processed {feedback_count} feedback entries")
-    
+
     return df
 
 
@@ -236,7 +235,7 @@ def process_feedback_data():
 def run_pipeline():
     """
     Run the complete data pipeline.
-    
+
     This orchestrates all data processing stages and
     produces a summary report.
     """
@@ -245,46 +244,46 @@ def run_pipeline():
     print("  Starting pipeline execution...")
     print("  Time: " + datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     print("=" * 60)
-    
+
     # Track pipeline metrics
     start_time = datetime.now()
     results = {}
-    
+
     try:
         # Process each data source
         results['circulation'] = process_circulation_data()
         results['events'] = process_events_data()
         #results['catalogue'] = process_catalogue_data()
         results['feedback'] = process_feedback_data()
-        
+
         # Calculate pipeline statistics
         end_time = datetime.now()
         duration = (end_time - start_time).total_seconds()
-        
+
         # Print final summary
         print_section_header("PIPELINE SUMMARY")
         print(f"\n✓ Pipeline completed successfully!")
         print(f"  - Duration: {duration:.2f} seconds")
         print(f"  - Files processed: {len(results)}")
         print(f"  - Output directory: {SILVER_DIR}")
-        
+
         print("\nCleaned files created:")
         for file in SILVER_DIR.glob("*.csv"):
             print(f"  - {file.name}")
-        
+
         print("\n" + "=" * 60)
         print("  Next steps:")
         print("  1. Review the cleaned data in data/silver/")
         print("  2. Run your data quality analysis")
         print("  3. Deploy to Microsoft Fabric")
         print("=" * 60 + "\n")
-        
+
         return results
-        
+
     except Exception as e:
         print(f"\n❌ Pipeline failed with error: {str(e)}")
-        print(f"  - Check your data files exist")
-        print(f"  - Check your functions are working")
+        print("  - Check your data files exist")
+        print("  - Check your functions are working")
         raise
 
 
