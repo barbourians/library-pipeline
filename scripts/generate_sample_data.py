@@ -255,7 +255,8 @@ def generate_catalogue_data(n):
     # 1. Some ISBNs stored as numbers (Excel removes leading zeros)
     numeric_isbns = random.sample(range(len(df)), int(len(df) * 0.1))
     for idx in numeric_isbns:
-        df.loc[idx, 'ISBN'] = int(df.loc[idx, 'ISBN'].replace('-', '')) if df.loc[idx, 'ISBN'] else None
+        if df.loc[idx, 'ISBN']:
+            df.loc[idx, 'ISBN'] = int(df.loc[idx, 'ISBN'].replace('-', ''))
 
     # 2. Inconsistent column names (spaces vs underscores)
     # Will handle this when writing to Excel with multiple sheets
