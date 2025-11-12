@@ -103,12 +103,12 @@ def generate_events_data(n):
     ]
 
     branches = [
-        'Stratford', 'East Ham', 'Manor Park', 'Plaistow', 
+        'Stratford', 'East Ham', 'Manor Park', 'Plaistow',
         'Custom House', 'North Woolwich', 'Beckton'
     ]
 
     events = []
-    
+
     for i in range(n):
         event = {
             'event_id': f'EVT{i:04d}',
@@ -127,7 +127,7 @@ def generate_events_data(n):
             },
             'feedback_score': round(random.uniform(3.0, 5.0), 1) if random.random() > 0.1 else None
         }
-    
+
         events.append(event)
 
     # Wrap in structure (forces learners to handle nesting)
