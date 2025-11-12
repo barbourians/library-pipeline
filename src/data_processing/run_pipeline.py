@@ -244,7 +244,7 @@ def run_pipeline():
         # Process each data source
         results['circulation'] = process_circulation_data()
         results['events'] = process_events_data()
-        results['catalogue'] = process_catalogue_data()
+        #results['catalogue'] = process_catalogue_data()
         results['feedback'] = process_feedback_data()
         
         # Calculate pipeline statistics
