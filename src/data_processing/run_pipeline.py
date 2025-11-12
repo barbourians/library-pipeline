@@ -112,7 +112,7 @@ def process_circulation_data():
 def process_events_data():
     """
     Process events data (library events from JSON).
-    
+
     Steps:
     1. Load from bronze
     2. Flatten nested JSON
@@ -143,7 +143,7 @@ def process_events_data():
 def process_catalogue_data():
     """
     Process catalogue data (book catalogue from Excel).
-    
+
     Steps:
     1. Load from bronze
     2. Remove duplicates
@@ -184,10 +184,10 @@ def process_catalogue_data():
 def process_feedback_data():
     """
     Process feedback data (unstructured text).
-    
+
     Note: This is a simplified version.
     In practice, you'd parse the text file properly.
-    
+
     Steps:
     1. Load raw text
     2. Parse into structured format
@@ -253,7 +253,7 @@ def run_pipeline():
         # Process each data source
         results['circulation'] = process_circulation_data()
         results['events'] = process_events_data()
-        #results['catalogue'] = process_catalogue_data()
+        results['catalogue'] = process_catalogue_data()
         results['feedback'] = process_feedback_data()
 
         # Calculate pipeline statistics
@@ -262,7 +262,7 @@ def run_pipeline():
 
         # Print final summary
         print_section_header("PIPELINE SUMMARY")
-        print(f"\n✓ Pipeline completed successfully!")
+        print("\n✓ Pipeline completed successfully!")
         print(f"  - Duration: {duration:.2f} seconds")
         print(f"  - Files processed: {len(results)}")
         print(f"  - Output directory: {SILVER_DIR}")
