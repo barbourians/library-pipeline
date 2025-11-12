@@ -9,3 +9,5 @@ faker>=20.0.0        # For data generation
 mkdocs
 mkdocs-material
 mkdocs-glightbox
+
+flake8
