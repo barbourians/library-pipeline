@@ -2,20 +2,22 @@
 Data validation functions.
 """
 
+import pandas as pd
+
 def validate_isbn(isbn):
     """Validate ISBN-13 format.
 
     Args:
-        isbn (str): ISBN string to validate
+        isbn (str | int | float): ISBN to validate
 
     Returns:
         bool: True if valid, False otherwise
     """
-    if not isbn:
+    if pd.isna(isbn) or isbn == '':
         return False
 
     # Remove hyphens
-    isbn = isbn.replace('-', '')
+    isbn = str(isbn).replace('-', '').strip()
 
     # Check length
     if len(isbn) != 13:
