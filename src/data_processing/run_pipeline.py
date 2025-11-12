@@ -196,7 +196,7 @@ def process_feedback_data():
     print("\n[1/2] Loading and parsing feedback text...")
     
     # Read the text file
-    with open('data/feedback.txt', 'r') as f:
+    with open('data/feedback.txt', 'r', encoding='utf-8') as f:
         content = f.read()
     
     # Simple parsing (you might improve this)
