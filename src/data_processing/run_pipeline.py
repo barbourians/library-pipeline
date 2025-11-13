@@ -20,11 +20,7 @@ from datetime import datetime
 
 # Import our custom functions
 from src.data_processing.ingestion import load_csv, load_json, load_excel
-from src.data_processing.cleaning import (
-    remove_duplicates,
-    handle_missing_values,
-    standardize_dates
-)
+from src.data_processing.cleaning import remove_duplicates, handle_missing_values, standardize_dates
 from src.data_processing.validation import validate_isbn
 
 
@@ -33,8 +29,8 @@ from src.data_processing.validation import validate_isbn
 # ============================================
 
 # Define our data directories (medallion architecture)
-BRONZE_DIR = Path('data')
-SILVER_DIR = Path('data/silver')
+BRONZE_DIR = Path("data")
+SILVER_DIR = Path("data/silver")
 
 # Create silver directory if it doesn't exist
 SILVER_DIR.mkdir(parents=True, exist_ok=True)
@@ -43,6 +39,7 @@ SILVER_DIR.mkdir(parents=True, exist_ok=True)
 # ============================================
 # HELPER FUNCTIONS
 # ============================================
+
 
 def print_section_header(title):
     """Print a formatted section header."""
@@ -71,6 +68,7 @@ def save_to_silver(df, filename):
 # PIPELINE STAGES
 # ============================================
 
+
 def process_circulation_data():
     """
     Process circulation data (borrowing transactions).
@@ -86,23 +84,23 @@ def process_circulation_data():
 
     # Step 1: Load raw data
     print("\n[1/4] Loading raw data...")
-    df = load_csv('data/circulation_data.csv')
+    df = load_csv("data/circulation_data.csv")
     print_dataframe_info(df, "Raw data")
 
     # Step 2: Remove duplicates
     print("\n[2/4] Removing duplicates...")
-    df_clean = remove_duplicates(df, subset=['transaction_id'])
+    df_clean = remove_duplicates(df, subset=["transaction_id"])
     rows_removed = len(df) - len(df_clean)
     print(f"  - Removed {rows_removed:,} duplicate rows")
 
     # Step 3: Handle missing values
     print("\n[3/4] Handling missing values...")
-    df_clean = handle_missing_values(df_clean, strategy='drop')
+    df_clean = handle_missing_values(df_clean, strategy="drop")
     print("  - Dropped rows with missing values")
 
     # Step 4: Save cleaned data
     print("\n[4/4] Saving cleaned data...")
-    filepath = save_to_silver(df_clean, 'circulation_clean.csv')
+    filepath = save_to_silver(df_clean, "circulation_clean.csv")
     print(f"  ✓ Saved to: {filepath}")
     print_dataframe_info(df_clean, "Cleaned data")
 
@@ -123,16 +121,16 @@ def process_events_data():
 
     # Step 1: Load raw data
     print("\n[1/3] Loading raw data...")
-    df = load_json('data/events_data.json')
+    df = load_json("data/events_data.json")
     print_dataframe_info(df, "Raw data")
 
     # Step 2: Handle missing values
     print("\n[2/3] Handling missing values...")
-    df_clean = handle_missing_values(df, strategy='drop')
+    df_clean = handle_missing_values(df, strategy="drop")
 
     # Step 3: Save cleaned data
     print("\n[3/3] Saving cleaned data...")
-    filepath = save_to_silver(df_clean, 'events_clean.csv')
+    filepath = save_to_silver(df_clean, "events_clean.csv")
     print(f"  ✓ Saved to: {filepath}")
 
     print_dataframe_info(df_clean, "Cleaned data")
@@ -155,25 +153,25 @@ def process_catalogue_data():
 
     # Step 1: Load raw data
     print("\n[1/4] Loading raw data...")
-    df = load_excel('data/catalogue.xlsx')
+    df = load_excel("data/catalogue.xlsx")
     print_dataframe_info(df, "Raw data")
 
     # Step 2: Remove duplicates
     print("\n[2/4] Removing duplicates...")
-    df_clean = remove_duplicates(df, subset=['ISBN'])
+    df_clean = remove_duplicates(df, subset=["ISBN"])
     rows_removed = len(df) - len(df_clean)
     print(f"  - Removed {rows_removed:,} duplicate rows")
 
     # Step 3: Validate ISBNs (if ISBN column exists)
-    if 'ISBN' in df_clean.columns:
+    if "ISBN" in df_clean.columns:
         print("\n[3/4] Validating ISBNs...")
-        df_clean['ISBN_valid'] = df_clean['ISBN'].apply(validate_isbn)
-        invalid_count = (~df_clean['ISBN_valid']).sum()
+        df_clean["ISBN_valid"] = df_clean["ISBN"].apply(validate_isbn)
+        invalid_count = (~df_clean["ISBN_valid"]).sum()
         print(f"  - Found {invalid_count:,} invalid ISBNs")
 
     # Step 4: Save cleaned data
     print("\n[4/4] Saving cleaned data...")
-    filepath = save_to_silver(df_clean, 'catalogue_clean.csv')
+    filepath = save_to_silver(df_clean, "catalogue_clean.csv")
     print(f"  ✓ Saved to: {filepath}")
 
     print_dataframe_info(df_clean, "Cleaned data")
@@ -198,11 +196,11 @@ def process_feedback_data():
     print("\n[1/2] Loading and parsing feedback text...")
 
     # Read the text file
-    with open('data/feedback.txt', 'r', encoding='utf-8') as f:
+    with open("data/feedback.txt", "r", encoding="utf-8") as f:
         content = f.read()
 
     # Count the feedbacks
-    feedback_count = content.count('Feedback #')
+    feedback_count = content.count("Feedback #")
     print(f"  - Found {feedback_count} feedback entries")
 
     # Capture both branch name and rating number
@@ -232,6 +230,7 @@ def process_feedback_data():
 # MAIN PIPELINE
 # ============================================
 
+
 def run_pipeline():
     """
     Run the complete data pipeline.
@@ -251,10 +250,10 @@ def run_pipeline():
 
     try:
         # Process each data source
-        results['circulation'] = process_circulation_data()
-        results['events'] = process_events_data()
-        results['catalogue'] = process_catalogue_data()
-        results['feedback'] = process_feedback_data()
+        results["circulation"] = process_circulation_data()
+        results["events"] = process_events_data()
+        results["catalogue"] = process_catalogue_data()
+        results["feedback"] = process_feedback_data()
 
         # Calculate pipeline statistics
         end_time = datetime.now()

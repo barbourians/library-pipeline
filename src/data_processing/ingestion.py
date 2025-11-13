@@ -12,6 +12,7 @@ from pathlib import Path
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def load_csv(filepath, **kwargs):
     """Load CSV file into DataFrame.
 
@@ -50,6 +51,7 @@ def load_csv(filepath, **kwargs):
         logger.error(f"Error loading CSV {filepath}: {e}")
         raise
 
+
 def load_json(filepath):
     """Load JSON file and flatten to DataFrame.
 
@@ -74,13 +76,13 @@ def load_json(filepath):
 
     try:
         logger.info(f"Loading JSON from {filepath}")
-        with open(filepath, 'r') as f:
+        with open(filepath, "r") as f:
             data = json.load(f)
 
         # Flatten nested structure
         # Adjust based on your JSON structure
-        if isinstance(data, dict) and 'events' in data:
-            df = pd.json_normalize(data['events'])
+        if isinstance(data, dict) and "events" in data:
+            df = pd.json_normalize(data["events"])
         else:
             df = pd.json_normalize(data)
 
@@ -93,6 +95,7 @@ def load_json(filepath):
     except Exception as e:
         logger.error(f"Error loading JSON {filepath}: {e}")
         raise
+
 
 def load_excel(filepath, sheet_name=0, **kwargs):
     """Load Excel file into DataFrame.
@@ -128,7 +131,9 @@ def load_excel(filepath, sheet_name=0, **kwargs):
 
         if isinstance(df, dict):
             total_rows = sum(len(v) for v in df.values())
-            logger.info(f"Successfully loaded {len(df)} sheet(s), total {total_rows} rows from {filepath}")
+            logger.info(
+                f"Successfully loaded {len(df)} sheet(s), total {total_rows} rows from {filepath}"
+            )
         else:
             logger.info(f"Successfully loaded {len(df)} rows from {filepath}")
 

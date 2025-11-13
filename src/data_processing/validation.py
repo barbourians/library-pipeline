@@ -4,6 +4,7 @@ Data validation functions.
 
 import pandas as pd
 
+
 def validate_isbn(isbn):
     """Validate ISBN-13 format.
 
@@ -13,11 +14,11 @@ def validate_isbn(isbn):
     Returns:
         bool: True if valid, False otherwise
     """
-    if pd.isna(isbn) or isbn == '':
+    if pd.isna(isbn) or isbn == "":
         return False
 
     # Remove hyphens
-    isbn = str(isbn).replace('-', '').strip()
+    isbn = str(isbn).replace("-", "").strip()
 
     # Check length
     if len(isbn) != 13:
